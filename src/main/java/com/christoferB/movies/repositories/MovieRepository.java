@@ -1,4 +1,7 @@
 package com.christoferB.movies.repositories;
 
-public interface MovieRepository {
+import com.christoferB.movies.models.Movie;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface MovieRepository extends JpaRepository<Movie,Long> {
 }
