@@ -56,5 +56,22 @@ public class MovieController {
             return ResponseEntity.ok(savedMovie);
         }
     }
+    @CrossOrigin
+    @GetMapping("/vote/{id}/{rating}")
+    public ResponseEntity<Movie> voteMovie(@PathVariable Long id,@PathVariable double rating){
+        if(!movieRepository.existsById(id)) {
+            return ResponseEntity.notFound().build();
+        }else {
+            Optional <Movie> optional = movieRepository.findById(id);
+            Movie movie = optional.get();
+
+            double newRating = ( (movie.getVotes() * movie.getRating() + rating) / (movie.getVotes() + 1));
+            movie.setVotes(movie.getVotes() + 1);
+            movie.setRating(newRating);
+
+            Movie savedMovie = movieRepository.save(movie);
+            return ResponseEntity.ok(savedMovie);
+        }
+    }
 }
 
