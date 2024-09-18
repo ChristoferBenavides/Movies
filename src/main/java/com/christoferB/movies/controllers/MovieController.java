@@ -28,7 +28,7 @@ public class MovieController {
         Optional<Movie> movie = movieRepository.findById(id);
         return movie.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
-    @CrossOrigin
+
     @PostMapping
     public ResponseEntity<Movie> createMovie(@RequestBody  Movie movie) {
         Movie savedMovie = movieRepository.save(movie);
