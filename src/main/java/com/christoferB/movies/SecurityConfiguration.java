@@ -33,6 +33,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(registry ->{
 
                     registry.requestMatchers("/register/user").permitAll();
+                    registry.requestMatchers("/welcome").authenticated();
                     registry.requestMatchers(HttpMethod.GET, "/api/movies").permitAll();
                     registry.requestMatchers(HttpMethod.POST, "/api/movies").hasRole("USER");
                     registry.requestMatchers(HttpMethod.GET, "/api/movies/{id}").hasRole("USER");
@@ -40,7 +41,15 @@ public class SecurityConfiguration {
                     registry.requestMatchers(HttpMethod.PUT, "/api/movies/{id}").hasRole("ADMIN");
                     registry.anyRequest().authenticated();
                 })
-                .formLogin(AbstractAuthenticationFilterConfigurer::permitAll)
+                .exceptionHandling(exceptionHandling -> exceptionHandling
+                        .accessDeniedPage("/403")) // error 403
+                //.formLogin(AbstractAuthenticationFilterConfigurer::permitAll)
+                .formLogin(httpSecurityFormLoginConfigurer -> {
+                    httpSecurityFormLoginConfigurer
+                            .loginPage("/login")
+                            .defaultSuccessUrl("/welcome", true)
+                            .permitAll();
+                })
                 .httpBasic(withDefaults())
                 .build();
     }
