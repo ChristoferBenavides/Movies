@@ -24,6 +24,20 @@ public class Movie {
     @Column(name="image_url")
     private String imageUrl;
 
+    public Movie(Long id, String title, String description, int year, int votes, double rating, String imageUrl) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.year = year;
+        this.votes = votes;
+        this.rating = rating;
+        this.imageUrl = imageUrl;
+    }
+
+    public Movie(){
+
+    }
+
     public Long getId() {
         return id;
     }

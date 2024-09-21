@@ -39,6 +39,7 @@ public class SecurityConfiguration {
                     registry.requestMatchers(HttpMethod.GET, "/api/movies/{id}").hasRole("USER");
                     registry.requestMatchers(HttpMethod.DELETE, "/api/movies/{id}").hasRole("ADMIN");
                     registry.requestMatchers(HttpMethod.PUT, "/api/movies/{id}").hasRole("ADMIN");
+                    registry.requestMatchers(HttpMethod.GET,"/api/movies/vote/{id}/{rating}").permitAll();
                     registry.anyRequest().authenticated();
                 })
                 .exceptionHandling(exceptionHandling -> exceptionHandling

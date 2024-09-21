@@ -2,6 +2,7 @@ package com.christoferB.movies.controllers;
 
 import com.christoferB.movies.models.Movie;
 import com.christoferB.movies.repositories.MovieRepository;
+import com.christoferB.movies.service.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,9 @@ public class MovieController {
 
     @Autowired
     private MovieRepository movieRepository;
+
+    @Autowired
+    private MovieService movieService;
     @CrossOrigin
     @GetMapping
     public List<Movie> getAllMovies(){
@@ -58,20 +62,9 @@ public class MovieController {
     }
     @CrossOrigin
     @GetMapping("/vote/{id}/{rating}")
-    public ResponseEntity<Movie> voteMovie(@PathVariable Long id,@PathVariable double rating){
-        if(!movieRepository.existsById(id)) {
-            return ResponseEntity.notFound().build();
-        }else {
-            Optional <Movie> optional = movieRepository.findById(id);
-            Movie movie = optional.get();
-
-            double newRating = ( (movie.getVotes() * movie.getRating() + rating) / (movie.getVotes() + 1));
-            movie.setVotes(movie.getVotes() + 1);
-            movie.setRating(newRating);
-
-            Movie savedMovie = movieRepository.save(movie);
-            return ResponseEntity.ok(savedMovie);
-        }
+    public ResponseEntity<Movie> voteMovie(@PathVariable Long id, @PathVariable double rating) {
+        Optional<Movie> movie = movieService.voteMovie(id, rating);
+        return movie.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 }
 
